@@ -1,2 +1,2 @@
 # Note
-leetcode answer
+The leetcode answer written by c++.
