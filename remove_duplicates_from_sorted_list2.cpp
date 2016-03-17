@@ -15,37 +15,24 @@ public:
         ListNode* preHead = new ListNode(0);
         preHead->next = head;
         
-        // store the first index of the list
-        // if item with index i is duplicate, we set m[i] = -1
-        // later we will remove it from the list
-        unordered_map<int, int> m;
-        ListNode *cur = head, *pre;
-        int ind = 0;
+        // Note: the list is sorted
+        ListNode* pre = preHead;
+        ListNode* cur = head;
+        
+        bool isDuplicate = false;
         while (cur != NULL) {
-            if (m.find(cur->val) != m.end()) {
-                m[cur->val] = -1;
-                // remove the current node
-                pre->next = cur->next;
-            } else {
-                m[cur->val] = ind;
-                ind ++;
-                pre = cur;
+            while (cur->next && cur->val == cur->next->val) {
+                cur = cur->next;
+                isDuplicate = true;
             }
-            cur = cur->next;
-        }
-        
-        // remove the node with m[ind] = -1
-        cur = head;
-        pre = preHead;
-        ind = 0;
-        
-        while (cur != NULL) {
-            if (-1 == m[cur->val]) {
+            if (isDuplicate) {
                 pre->next = cur->next;
             } else {
                 pre = cur;
             }
+            
             cur = cur->next;
+            isDuplicate = false;
         }
         
         return preHead->next;
