@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <iostream>
 #include <vector>
 #include <climits>
@@ -29,6 +30,7 @@ public:
         return sell[k-1];
     }
 };
+<<<<<<< HEAD
 
 int main()
 {
@@ -41,3 +43,5 @@ int main()
   cout << s.maxProfit(k, prices) << endl;
   return 0;
 }
+=======
+>>>>>>> 9350d2aa605a1f8d7f21c6f1c28f210967fdb798
