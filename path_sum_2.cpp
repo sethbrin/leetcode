@@ -8,7 +8,7 @@
  * };
  */
 class Solution {
-    void pathSum2(TreeNode* root, int sum, vector<int> curVec, vector<vector<int>>& res) {
+    void pathSum2(TreeNode* root, int sum, vector<int>& curVec, vector<vector<int>>& res) {
         if (root == NULL) return;
         
         curVec.push_back(root->val);
@@ -17,18 +17,21 @@ class Solution {
             if (sum == 0) {
                 res.push_back(curVec);
             }
+            curVec.pop_back();
             return;
         }
         
         pathSum2(root->left, sum, curVec, res);
         pathSum2(root->right, sum, curVec, res);
+        curVec.pop_back();
     }
 public:
     vector<vector<int>> pathSum(TreeNode* root, int sum) {
         vector<vector<int>> res;
         if (root == NULL) return res;
         
-        pathSum2(root, sum, vector<int>(), res);
+        vector<int> curVec;
+        pathSum2(root, sum, curVec, res);
         
         return res;
     }
