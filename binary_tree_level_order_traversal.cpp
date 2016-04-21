@@ -24,7 +24,8 @@ public:
         int count = 1;
         while (!q.empty()) {
             int curCount = 0;
-            vector<int> levelNum;
+            res.push_back({});
+            vector<int>& levelNum = res.back();
             while (count--) {
                 TreeNode* tmp = q.front();
                 q.pop();
@@ -42,7 +43,8 @@ public:
             }
             if (curCount > 0) {
                 count = curCount;
-                res.push_back(levelNum);
+            } else {
+                res.pop_back();
             }
         }
         return res;
