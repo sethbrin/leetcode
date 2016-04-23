@@ -3,18 +3,18 @@ class Solution {
 public:
 
     int integerBreak(int n) {
-        int dp[n+1];
+        if (n == 2) return 1;
+        if (n == 3) return 2;
 
-        dp[2] = 1;
-        dp[3] = 2;
+        int remainder = n / 3;
+        int mod = n - remainder * 3;
 
-        for (int i=4; i<=n; i++) {
-            dp[i] = 0;
-            for (int j=2; j<=i/2; j++) {
-                dp[i] = max(dp[i], max(j, dp[j]) * max(dp[i-j], i-j));
-            }
+        if (mod == 0) {
+            return pow(3, remainder);
+        } else if (mod == 1){
+            return pow(3, remainder - 1) * 4;
+        } else {
+            return pow(3, remainder) * 2;
         }
-
-        return dp[n];
     }
 };
