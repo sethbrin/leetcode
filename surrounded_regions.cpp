@@ -1,19 +1,38 @@
 class Solution {
 private:
-    void dfs(int i, int y, vector<vector<char>>& board, int nrows, int ncols) {
+    void bfs(int i, int j, vector<vector<char>>& board, int nrows, int ncols) {
         board[i][j] = '+';
         // no need to consider the peripheral border, so the condition
         // is i > 1, i < rows - 2, not i > 0, i < rows - 1.
         //
-        // if use i > 0, i < rows - 1, DFS solution will get a Runtime Error, stack overflow
-        if (i > 1 && board[i - 1][j] == 'O')
-            dfs(i-1, j, board, nrows, ncols);
-        if (i < nrows - 2 && board[i + 1][j] == 'O')
-            dfs(i+1, j, board, nrows, ncols);
-        if (j > 1 && board[i][j - 1] == 'O')
-            dfs(i, j-1, board, nrows, ncols);
-        if (j < ncols - 2 && board[i][j + 1] == 'O')
-            dfs(i, j+1, board, nrows, ncols);
+        // if use i > 0, i < rows - 1, also accept
+        queue<pair<int, int>> q;
+        q.push({i, j});
+        
+        while (!q.empty()) {
+            pair<int, int> cur = q.front();
+            int row = cur.first;
+            int col = cur.second;
+            q.pop();
+            
+            if (row > 1 && board[row-1][col] == 'O') {
+                board[row-1][col] = '+';
+                q.push({row-1, col});
+            }
+            if (row < nrows-2 && board[row+1][col] == 'O') {
+                board[row+1][col] = '+';
+                q.push({row+1, col});
+            }
+            if (col > 1 && board[row][col-1] == 'O') {
+                board[row][col-1] = '+';
+                q.push({row, col-1});
+            }
+            if (col < ncols - 1 && board[row][col+1] == 'O') {
+                board[row][col+1] = '+';
+                q.push({row, col+1});
+            }
+           
+        }
     }
 public:
     void solve(vector<vector<char>>& board) {
@@ -26,15 +45,15 @@ public:
        // we can reduce many iterator
        for (int col = 0; col < ncols; ++col) {
             if (board[0][col] == 'O')
-                dfs(0, col, board, nrows, ncols);
+                bfs(0, col, board, nrows, ncols);
             if (board[nrows - 1][col] == 'O')
-                dfs(nrows-1, col, board, nrows, ncols);
+                bfs(nrows-1, col, board, nrows, ncols);
         }
         for (int row = 1; row < nrows - 1; ++row) {
             if (board[row][0] == 'O')
-                dfs(row, 0, board, nrows, ncols);
+                bfs(row, 0, board, nrows, ncols);
             if (board[row][ncols - 1] == 'O')
-                dfs(row, ncols-1, board, nrows, ncols);
+                bfs(row, ncols-1, board, nrows, ncols);
         }
         for (int row = 0; row < nrows; ++row) {
             for (int col = 0; col < ncols; ++col) {
