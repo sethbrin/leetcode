@@ -1,4 +1,3 @@
-*.swp
-*.o
-a.out
-test.cpp
+*
+!*.cpp
+!README.md
