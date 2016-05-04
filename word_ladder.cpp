@@ -5,29 +5,30 @@ public:
         if (size == 0) return 0;
         // use bfs
         queue<pair<string, int>> q;
-        unordered_set<string> visitedList;
         q.push({beginWord, 1});
-        visitedList.insert(beginWord);
+        wordList.erase(beginWord);
         
-        while (!q.empty()) {
-            auto curPair = q.front(); 
-            string cur = curPair.first;
-            int level = curPair.second;
+        while(!q.empty()) {
+            auto front = q.front();
+            string word = front.first;
             q.pop();
             
-            for (int i=0; i<size; i++) {
+            for (int i=0; i<word.size(); i++) {
                 for (char ch='a'; ch<='z'; ch++) {
-                    char tmp = cur[i];
-                    cur[i] = ch;
-                    if (cur == endWord) {
-                        return level+1;
-                    } else {
-                        if (visitedList.find(cur) == visitedList.end() && wordList.find(cur) != wordList.end()) {
-                            q.push({cur, level+1});
-                            visitedList.insert(cur);
+                    char tmp = word[i];
+                    if (tmp != ch) {
+                        word[i] = ch;
+                        
+                        if (word == endWord) return front.second + 1;
+                        
+                        if (wordList.find(word) != wordList.end()) {
+                            q.push({word, front.second + 1});
+                            // the later word should not be word
+                            // Also can use a visited set to store the visited words
+                            wordList.erase(word);
                         }
+                        word[i] = tmp;
                     }
-                    cur[i] = tmp;
                 }
             }
         }
