@@ -1,107 +1,24 @@
 class Solution {
-
 public:
-
-    void getSpiralOneCicle(vector<int>& res, int start, int nrows, int ncols, vector<vector<int>>& matrix) {
-
-        // get the top side
-
-        if (nrows ==0 || ncols == 0) {
-
-            return;
-
-        }
-
-        int row = start;
-
-        int col = start;
-
-        for (int i=0; i<ncols; i++) {
-
-            res.push_back(matrix[row][col]);
-
-            col ++;
-
-        }
-
-        col --;
-
-        if (nrows == 1) {
-
-            return;
-
-        }
-
-        
-
-        // get the right side
-
-        for (int i=0; i<nrows-1; i++) {
-
-            row ++;
-
-            res.push_back(matrix[row][col]);
-
-        }
-
-
-
-        // get the bottom side
-
-        for (int i=0; i<ncols-1; i++) {
-
-            col --;
-
-            res.push_back(matrix[row][col]);
-
-        }
-
-        if (ncols == 1) {
-
-            return;
-
-        }
-
-        for (int i=0; i<nrows-2; i++) {
-
-            row --;
-
-            res.push_back(matrix[row][col]);
-
-        }
-
-    }
-
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
-
         vector<int> res;
-
-        int row = matrix.size();
-
-        if (row == 0) {
-
-            return res;
-
-        }
-
-        int col = matrix[0].size();
-
+        int rows = matrix.size();
+        if (rows == 0) return res;
+        int cols = matrix[0].size();
+        if (cols == 0) return res;
         
-
-        int minDimension = min(row, col);
-
-        for (int i=0; i<minDimension; i++) {
-
-            getSpiralOneCicle(res, i, row-i*2, col-i*2,matrix);
-
+        for (int r=0, c=0; r < (rows+1)/2 && c < (cols+1)/2; c++, r++) {
+            // top
+            for (int i=c; i<cols-c; i++) res.push_back(matrix[r][i]);
+            // right
+            for (int i=r+1; i<rows-r; i++) res.push_back(matrix[i][cols-c-1]);
+            // bottom
+            // As rows-r-1 is cover by the right
+            for (int i=cols-c-2; rows-r-1>r && i>=c; i--) res.push_back(matrix[rows-r-1][i]);
+            // left
+            for (int i=rows-r-2; cols-c-1>c && i>=r+1; i--) res.push_back(matrix[i][c]);
         }
-
         
-
         return res;
-
     }
-
 };
-
-
