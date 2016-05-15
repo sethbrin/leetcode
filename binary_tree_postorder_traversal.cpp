@@ -12,31 +12,25 @@ public:
     vector<int> postorderTraversal(TreeNode* root) {
         vector<int> res;
         if (root == NULL) return res;
-       
-        stack<pair<TreeNode*, bool>> s;
-        s.push({root, false});
+        // print node, print node->right print node->left
+        // reverse the res
         
-        while (root->left) {
-            s.push({root->left, false});
-            root = root->left;
-        }
+        stack<TreeNode*> s;
+        s.push(root);
+        
         while (!s.empty()) {
-            auto& top = s.top();
-            if (top.second) {
-                res.push_back(top.first->val);
-                s.pop();
-            } else {
-                top.second = true;
-                TreeNode* node = top.first->right;
-                if (node) {
-                    s.push({node, false});
-                    while (node->left) {
-                        s.push({node->left, false});
-                        node = node->left;
-                    }
-                }
+            TreeNode* node = s.top();
+            s.pop();
+            res.push_back(node->val);
+            if (node->left) {
+                s.push(node->left);
+            }
+            if (node->right) {
+                s.push(node->right);
             }
         }
+        
+        reverse(res.begin(), res.end());
         
         return res;
     }
