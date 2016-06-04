@@ -1,42 +1,32 @@
 class Solution {
 private:
-    unordered_map<int, bool> m;
-    bool wordBreak(const string& s, int start, unordered_set<string>& wordDict,
-        vector<string>& path, vector<string>& res) {
-        int size = s.size();
-        if (start == size) {
-            if (path.empty()) return false;
-            string tmp = path[0];
-            for (int i = 1; i < path.size(); i++) {
-                tmp += (" " + path[i]);
-            }
-            res.push_back(tmp);
-            
-            return true;
+    unordered_map<string, vector<string>> m;
+    vector<string> combine(vector<string> res, const string& word) {
+        for (string& str : res) {
+            str += " " + word;
         }
-        
-        bool flag = false;
-        for (int i = start + 1; i <= size; i++) {
-            string word = s.substr(start, i - start);
-            if ((m.find(i) == m.end() || m[i]) && wordDict.find(word) != wordDict.end()) {
-                path.push_back(word);
-                if (wordBreak(s, i, wordDict, path, res)) flag = true;
-                path.pop_back();
-            }
-        }
-        
-        m[start] = flag;
-        return flag;
+        return res;
     }
 public:
     vector<string> wordBreak(string s, unordered_set<string>& wordDict) {
+        if (m.find(s) != m.end()) return m[s];
+        
         vector<string> res;
-        if (s.empty()) {
-            return res;
+        if (wordDict.find(s) != wordDict.end()) {
+            res.push_back(s);
         }
         
-        vector<string> path;
-        wordBreak(s, 0, wordDict, path, res);
+        for (int i = 1; i < s.size(); i++) {
+            string newWord = s.substr(i);
+            
+            if (wordDict.find(newWord) != wordDict.end()) {
+                string remStr = s.substr(0, i);
+                vector<string> prev = combine(wordBreak(remStr, wordDict), newWord);
+                
+                res.insert(res.end(), prev.begin(), prev.end());
+            }
+        }
+        m[s] = res;
         return res;
     }
 };
